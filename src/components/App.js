@@ -1,8 +1,7 @@
 import React from 'react';
 import {useState, useEffect} from 'react';
 import callToApi from '../services/apiAdalabers';
-//import data from '../data';
-//import ls from '../services/localStorage';
+import ls from '../services/localStorage';
 import '../styles/App.scss';
 
 function App() {
@@ -19,10 +18,10 @@ function App() {
     social_networks: []
   });
   //Search form object to fill with input information
-  const [searchAda, setSearchAda] = useState({
+  const [searchAda, setSearchAda] = useState(ls.get('searchAdaInputs',{
     name: '',
     counselor: ''
-  })
+  }));
 
   //USE EFFECT
   useEffect(() => {
@@ -64,9 +63,10 @@ function App() {
     if(ev.target.value !== ''){
       const selectedValue = ev.target.value;
       const transformedValue = selectedValue[0].toUpperCase() + selectedValue.substring(1);
-      setSearchAda({...searchAda, [ev.target.id] : transformedValue})
+      setSearchAda({...searchAda, [ev.target.id] : transformedValue});
+      ls.set('searchAdaInputs',{...searchAda, [ev.target.id] : transformedValue});
     }else{
-      setSearchAda({...searchAda, [ev.target.id] : ev.target.value})
+      setSearchAda({...searchAda, [ev.target.id] : ev.target.value});
     }
   }
 
@@ -97,9 +97,9 @@ function App() {
       <section>
         <form onSubmit={handleSubmit}>
           <label htmlFor="name">Nombre:</label>
-          <input type="text" name="name" id="name" placeholder='Ej.: MariCarmen' onChange={handleSearchAda}/>
+          <input type="text" name="name" id="name" autoComplete="off" placeholder='Ej.: MariCarmen' value={searchAda.name} onChange={handleSearchAda}/>
           <label htmlFor="">Escoge una tutora:</label>
-          <select name="counselor" id="counselor" onChange={handleSearchAda}>
+          <select name="counselor" id="counselor" value={searchAda.counselor} onChange={handleSearchAda}>
             <option name="counselor" id="counselor" value="">Escoge una opción</option>
             <option name="counselor" id="counselor" value="yanelis">Yanelis</option>
             <option name="counselor" id="counselor" value="dayana">Dayana</option>
@@ -124,11 +124,11 @@ function App() {
         <form onSubmit={handleSubmit}>
           <h2>Añadir una Adalaber</h2>
           <label htmlFor="name">Nombre:</label>
-          <input type="text" name="name" id="name" placeholder='Ej.: MariCarmen' value={newAda.name} onChange={handleNewAda}/>
+          <input type="text" name="name" id="name" autoComplete="off"  placeholder='Ej.: MariCarmen' value={newAda.name} onChange={handleNewAda}/>
           <label htmlFor="counselor">Tutora:</label>
-          <input type="text" name="counselor" id="counselor" placeholder='Ej.: Yanelis' value={newAda.counselor} onChange={handleNewAda}/>
+          <input type="text" name="counselor" id="counselor" autoComplete="off"  placeholder='Ej.: Yanelis' value={newAda.counselor} onChange={handleNewAda}/>
           <label htmlFor="speciality">Especialidad:</label>
-          <input type="text" name="speciality" id="speciality" placeholder='Ej.: Python' value={newAda.speciality} onChange={handleNewAda}/>
+          <input type="text" name="speciality" id="speciality" autoComplete="off"  placeholder='Ej.: Python' value={newAda.speciality} onChange={handleNewAda}/>
           <input type="submitt" value="Añadir una nueva Adalaber" onClick={handleNewAdaClick}/>
         </form>
       </section>
