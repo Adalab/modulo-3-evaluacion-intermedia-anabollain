@@ -1,0 +1,3 @@
+const callToApi = () => {};
+
+export {callToApi};
