@@ -43,35 +43,10 @@ function App() {
   useEffect(() => {
     callToApi().then((response) => {
       setAdalabersList(response)
-      /*
-      if(newAdasList !== undefined){
-        const newList = response.concat(newAdasList);
-        setAdalabersList(newList );
-      }else{
-        setAdalabersList(response);
-      }*/
     })
   }, []);
 
   //EVENT FUNCTIONS
-
-  //Function to create object for a new Adalaber
-  /*const handleNewAda = (ev) => {
-    if(ev.target.id === 'social_networks--name'){
-      //First element in the array
-      newAda.social_networks[0].name = ev.target.value;
-      setNewAda({...newAda})
-    }else if(ev.target.id === 'social_networks--url'){
-      newAda.social_networks[0].url = ev.target.value;
-      setNewAda({...newAda})
-      //console.log(adalabersList[0].social_networks[0].name)
-    }else{
-      setNewAda({...newAda, [ev.target.id] : ev.target.value});
-      if(ev.target.id === 'counselor'){
-        ls.set('newCounselor', ev.target.value)
-      }
-    }
-  };*/
 
   //Function to create object for a new Adalaber
   const handleNewAda = (ev) => {
@@ -185,6 +160,7 @@ function App() {
       }) 
   };
 
+  //New adalabers list, option to delete them from local storage
   const renderNewAdalabers = () =>{
     return newAdasList
     .filter((eachAda) => eachAda.name.toLowerCase().includes(searchAda.name.toLowerCase()))
@@ -233,11 +209,6 @@ function App() {
             <label htmlFor="">Escoge una tutora:</label>
             <select name="counselor" id="counselor" value={searchAda.counselor} onChange={handleSearchAda}>
               {renderSelectOptions ()}
-              {/*<option name="counselor" id="counselor" value="">Escoge una opción</option>
-              <option name="counselor" id="counselor" value="yanelis">Yanelis</option>
-              <option name="counselor" id="counselor" value="dayana">Dayana</option>
-              <option name="counselor" id="counselor" value="iván">Iván</option>
-              <option name="counselor" id="counselor" value="miguel">Miguel</option>*/}
             </select>
           </div>
         </form>
