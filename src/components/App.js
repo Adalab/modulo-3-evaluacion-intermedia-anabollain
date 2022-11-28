@@ -8,6 +8,13 @@ import '../styles/App.scss';
 function App() {
   //STATE VARIABLES
   const [adalabersList, setAdalabersList] = useState([]);
+  const [newAda, setNewAda] = useState({
+    id: '',
+    name: '',
+    counselor: '',
+    speciality: '',
+    social_networks: []
+  });
 
   //USE EFFECT
   useEffect(() => {
@@ -17,6 +24,30 @@ function App() {
   }, []);
 
   //EVENT FUNCTIONS
+
+  const handleNewAda = (ev) => {
+    setNewAda({...newAda, [ev.target.id] : ev.target.value})
+  }
+
+  const handleNewAdaClick = () => {
+    if(newAda.name !== '' && newAda.counselor !== '' && newAda.speciality !== '' ){
+      setAdalabersList([...adalabersList, newAda]);
+      setNewAda({
+        id: '',
+        name: '',
+        counselor: '',
+        speciality: '',
+        social_networks: []
+      });
+    }else{
+      alert('Debes rellenar todos los valores.')
+    }
+  }
+
+  const handleSubmit = (ev) => {
+    ev.preventDefault();
+  }
+
   //RENDER FUNCTIONS
   const renderAdalabers = () =>{
     return adalabersList.map((eachAda)=>{
@@ -39,7 +70,7 @@ function App() {
       </header>
       {/*Main*/}
       <section>
-        <form>
+        <form onSubmit={handleSubmit}>
           <label htmlFor="name">Nombre:</label>
           <input type="text" name="name" id="name" placeholder='Ej.: MariCarmen'/>
           <label htmlFor="">Escoge una tutora:</label>
@@ -65,15 +96,15 @@ function App() {
         </table>
       </section>
       <section>
-        <form>
+        <form onSubmit={handleSubmit}>
           <h2>Añadir una Adalaber</h2>
           <label htmlFor="name">Nombre:</label>
-          <input type="text" name="name" id="name" placeholder='Ej.: MariCarmen'/>
+          <input type="text" name="name" id="name" placeholder='Ej.: MariCarmen' value={newAda.name} onChange={handleNewAda}/>
           <label htmlFor="counselor">Tutora:</label>
-          <input type="text" name="counselor" id="counselor" placeholder='Ej.: Yanelis'/>
+          <input type="text" name="counselor" id="counselor" placeholder='Ej.: Yanelis' value={newAda.counselor} onChange={handleNewAda}/>
           <label htmlFor="speciality">Especialidad:</label>
-          <input type="text" name="speciality" id="speciality" placeholder='Ej.: Python'/>
-          <input type="submitt" value="Añadir una nueva Adalaber" />
+          <input type="text" name="speciality" id="speciality" placeholder='Ej.: Python' value={newAda.speciality} onChange={handleNewAda}/>
+          <input type="submitt" value="Añadir una nueva Adalaber" onClick={handleNewAdaClick}/>
         </form>
       </section>
     </React.Fragment>
