@@ -6,8 +6,11 @@ import callToApi from '../services/apiAdalabers';
 import '../styles/App.scss';
 
 function App() {
+
   //STATE VARIABLES
+  //Adalabers main list
   const [adalabersList, setAdalabersList] = useState([]);
+  //New adalaber object, to fill with input information
   const [newAda, setNewAda] = useState({
     id: '',
     name: '',
@@ -15,6 +18,11 @@ function App() {
     speciality: '',
     social_networks: []
   });
+  //Search form object to fill with input information
+  const [searchAda, setSearchAda] = useState({
+    name: '',
+    counselor: ''
+  })
 
   //USE EFFECT
   useEffect(() => {
@@ -25,10 +33,12 @@ function App() {
 
   //EVENT FUNCTIONS
 
+  //Function to create object for a new Adalaber
   const handleNewAda = (ev) => {
     setNewAda({...newAda, [ev.target.id] : ev.target.value})
   }
 
+  //Function to add a new Adalaber to the list
   const handleNewAdaClick = () => {
     if(newAda.name !== '' && newAda.counselor !== '' && newAda.speciality !== '' ){
       setAdalabersList([...adalabersList, newAda]);
@@ -44,13 +54,28 @@ function App() {
     }
   }
 
+  //General functions for forms
   const handleSubmit = (ev) => {
     ev.preventDefault();
   }
 
+  //Function for search filter
+  const handleSearchAda = (ev) => {
+    if(ev.target.value !== ''){
+      const selectedValue = ev.target.value;
+      const transformedValue = selectedValue[0].toUpperCase() + selectedValue.substring(1);
+      setSearchAda({...searchAda, [ev.target.id] : transformedValue})
+    }else{
+      setSearchAda({...searchAda, [ev.target.id] : ev.target.value})
+    }
+  }
+
   //RENDER FUNCTIONS
   const renderAdalabers = () =>{
-    return adalabersList.map((eachAda)=>{
+    return adalabersList
+    .filter((eachAda) => eachAda.name.toLowerCase().includes(searchAda.name.toLowerCase()))
+    .filter((eachAda) => eachAda.counselor.toLowerCase().includes(searchAda.counselor.toLowerCase()))
+    .map((eachAda)=>{
         return(
           <tr key={eachAda.id}>
             <td>{eachAda.name}</td>
@@ -72,14 +97,14 @@ function App() {
       <section>
         <form onSubmit={handleSubmit}>
           <label htmlFor="name">Nombre:</label>
-          <input type="text" name="name" id="name" placeholder='Ej.: MariCarmen'/>
+          <input type="text" name="name" id="name" placeholder='Ej.: MariCarmen' onChange={handleSearchAda}/>
           <label htmlFor="">Escoge una tutora:</label>
-          <select name="mentor" id="mentor">
-            <option name="mentor" id="mentor" value="">Escoge una opción</option>
-            <option name="mentor" id="mentor" value="yanelis">Yanelis</option>
-            <option name="mentor" id="mentor" value="dayana">Dayana</option>
-            <option name="mentor" id="mentor" value="ivan">Iván</option>
-            <option name="mentor" id="mentor" value="miguel">Miguel</option>
+          <select name="counselor" id="counselor" onChange={handleSearchAda}>
+            <option name="counselor" id="counselor" value="">Escoge una opción</option>
+            <option name="counselor" id="counselor" value="yanelis">Yanelis</option>
+            <option name="counselor" id="counselor" value="dayana">Dayana</option>
+            <option name="counselor" id="counselor" value="ivan">Iván</option>
+            <option name="counselor" id="counselor" value="miguel">Miguel</option>
           </select>
         </form>
         <table>
