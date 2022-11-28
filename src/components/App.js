@@ -81,10 +81,15 @@ function App() {
             <td>{eachAda.name}</td>
             <td>{eachAda.counselor}</td>
             <td>{eachAda.speciality}</td>
+            <td>
+              {eachAda.social_networks.map((eachSocial, index) => {
+                  return <span key={index}><a href={eachSocial.url} target="_blank">{eachSocial.name}</a> </span>;
+              })}
+            </td>
           </tr>
         )
       }) 
-};
+  };
 
   //RETURN
   return (
@@ -113,6 +118,7 @@ function App() {
               <td>Nombre</td>
               <td>Tutora</td>
               <td>Especialidad</td>
+              <td>Redes</td>
             </tr>
           </thead>
           <tbody>
