@@ -17,33 +17,46 @@ function App() {
     name: '',
     counselor: '',
     speciality: '',
-    social_networks: [{
-      name: '',
-      url: ''
-    }]
+    social_networks: [
+      {name: '', url: ''},
+      {name: '', url: ''},
+      {name: '', url: ''}
+    ]
   });
+
   //Search form object to fill with input information
   const [searchAda, setSearchAda] = useState(ls.get('searchAdaInputs',{
     name: '',
     counselor: ''
   }));
+  //Flexible select so that user can add new counselors
+  const [selectOptions, setSelectOptions] = useState(ls.get('selectLocal',[
+    {name: 'Escoge una opción', value: ''},
+    {name: 'Yanelis', value: 'yanelis'},
+    {name: 'Dayana', value: 'dayana'},
+    {name: 'Iván', value: 'iván'},
+    {name: 'Miguel', value: 'miguel'}
+  ]));
+
 
   //USE EFFECT
   useEffect(() => {
     callToApi().then((response) => {
+      setAdalabersList(response)
+      /*
       if(newAdasList !== undefined){
         const newList = response.concat(newAdasList);
         setAdalabersList(newList );
       }else{
         setAdalabersList(response);
-      }
+      }*/
     })
   }, []);
 
   //EVENT FUNCTIONS
 
   //Function to create object for a new Adalaber
-  const handleNewAda = (ev) => {
+  /*const handleNewAda = (ev) => {
     if(ev.target.id === 'social_networks--name'){
       //First element in the array
       newAda.social_networks[0].name = ev.target.value;
@@ -58,31 +71,57 @@ function App() {
         ls.set('newCounselor', ev.target.value)
       }
     }
+  };*/
+
+  //Function to create object for a new Adalaber
+  const handleNewAda = (ev) => {
+    if(ev.target.id === 'github' && ev.target.value !== ''){
+      //First element in the array
+      newAda.social_networks[0].name = 'GitHub';
+      newAda.social_networks[0].url = ev.target.value;
+      setNewAda({...newAda})
+    }else if(ev.target.id === 'linkedin' && ev.target.value !== ''){
+      newAda.social_networks[1].name = 'LinkedIn';
+      newAda.social_networks[1].url = ev.target.value;
+      setNewAda({...newAda})
+    }else if(ev.target.id === 'twitter' && ev.target.value !== ''){
+      newAda.social_networks[2].name = 'Twitter';
+      newAda.social_networks[2].url = ev.target.value;
+      setNewAda({...newAda})
+      //console.log(adalabersList[0].social_networks[0].name)
+    }else{
+      setNewAda({...newAda, [ev.target.id] : ev.target.value});
+      if(ev.target.id === 'counselor'){
+        ls.set('newCounselor', ev.target.value)
+      }
+    }
   };
 
   //Function to add a new Adalaber to the list
   const handleNewAdaClick = () => {
-    if(newAda.name !== '' && newAda.counselor !== '' && newAda.speciality !== '' ){
+    if(newAda.name !== '' && newAda.counselor !== '' && newAda.speciality !== ''){
       //Add id to each new adalaber
       newAda.id = crypto.randomUUID();
-      //Include new adalaber into main list
-      setAdalabersList([...adalabersList, newAda]);
       //Save in local storage
       const newAdasLocal = [...newAdasList, newAda];
       ls.set('newAdasLocal', newAdasLocal);
-      console.log(newAdasLocal)
       //Add to new adas array
       setNewAdasList([...newAdasList, newAda]);
+      //Add new counselor to select 
+      let newSelect = {name: newAda.counselor, value: newAda.counselor};
+      ls.set('selectLocal', [...selectOptions, newSelect]);
+      setSelectOptions([...selectOptions, newSelect]);
       //Empty input values
       setNewAda({
         id: '',
         name: '',
         counselor: '',
         speciality: '',
-        social_networks: [{
-          name: '',
-          url: ''
-        }]
+        social_networks: [
+          {name: '', url: ''},
+          {name: '', url: ''},
+          {name: '', url: ''}
+        ]
       });
     }else{
       alert('Debes rellenar todos los valores.')
@@ -100,7 +139,32 @@ function App() {
       setSearchAda({...searchAda, [ev.target.id] : ev.target.value});
   }
 
+  //Delete new adalabers
+
+  const handleClickDelete = (ev) => {
+    //Find index of selected element
+    const selectedAdaIndex = newAdasList.findIndex ((eachAda) => ev.target.id === eachAda.id);
+    //Object responding to selected element
+    const selectedElem = newAdasList[selectedAdaIndex];
+    //Delete counselor from select
+    if(selectedElem.counselor !== 'Yanelis' && selectedElem.counselor !== 'Dayana' && selectedElem.counselor !== 'Iván' && selectedElem.counselor !== 'Miguel'){
+      const selectIndex = selectOptions.findIndex((eachSelect) => selectedElem.counselor === eachSelect.counselor);
+      selectOptions.splice(selectIndex, 1);
+      //Save in local storage
+      ls.set('selectLocal', selectOptions);
+      //Update array
+      setSelectOptions([...selectOptions]);
+    }
+    //Delete from original array selected element
+    newAdasList.splice(selectedAdaIndex, 1);
+    //Save in local storage latest array
+    ls.set('newAdasLocal', newAdasList);
+    //Update latest array
+    setNewAdasList([...newAdasList]);
+  }
+
   //RENDER FUNCTIONS
+  //Adalabers list
   const renderAdalabers = () =>{
     return adalabersList
     .filter((eachAda) => eachAda.name.toLowerCase().includes(searchAda.name.toLowerCase()))
@@ -121,6 +185,36 @@ function App() {
       }) 
   };
 
+  const renderNewAdalabers = () =>{
+    return newAdasList
+    .filter((eachAda) => eachAda.name.toLowerCase().includes(searchAda.name.toLowerCase()))
+    .filter((eachAda) => eachAda.counselor.toLowerCase().includes(searchAda.counselor.toLowerCase()))
+    .map((eachAda)=>{
+        return(
+          <tr key={eachAda.id} id={eachAda.id}>
+            <td className='table__body--cell'>{eachAda.name}</td>
+            <td className='table__body--cell'>{eachAda.counselor}</td>
+            <td className='table__body--cell'>{eachAda.speciality}</td>
+            <td className='table__body--cell'>
+              {eachAda.social_networks.map((eachSocial, index) => {
+                  return <span key={index}><a className='table__body--cell--social' href={eachSocial.url} target="_blank">{eachSocial.name}</a> </span>;
+              })}
+            </td>
+            <td className='table__body--cell'><i id={eachAda.id} onClick={handleClickDelete} class="fa-solid fa-trash"></i></td>
+          </tr>
+        )
+      }) 
+  }; 
+
+  //Select options
+  const renderSelectOptions = () => {
+    return selectOptions.map((eachOpt, index) => {
+      return <option key={index} name="counselor" id="counselor" value={eachOpt.value}>{eachOpt.name}</option>
+    })
+  }
+
+
+  
   //RETURN
   return (
     <React.Fragment>
@@ -138,11 +232,12 @@ function App() {
           <div>
             <label htmlFor="">Escoge una tutora:</label>
             <select name="counselor" id="counselor" value={searchAda.counselor} onChange={handleSearchAda}>
-              <option name="counselor" id="counselor" value="">Escoge una opción</option>
+              {renderSelectOptions ()}
+              {/*<option name="counselor" id="counselor" value="">Escoge una opción</option>
               <option name="counselor" id="counselor" value="yanelis">Yanelis</option>
               <option name="counselor" id="counselor" value="dayana">Dayana</option>
               <option name="counselor" id="counselor" value="iván">Iván</option>
-              <option name="counselor" id="counselor" value="miguel">Miguel</option>
+              <option name="counselor" id="counselor" value="miguel">Miguel</option>*/}
             </select>
           </div>
         </form>
@@ -157,6 +252,7 @@ function App() {
           </thead>
           <tbody className='table__body'>
             {renderAdalabers()}
+            {renderNewAdalabers()}
           </tbody>
         </table>
       </section>
@@ -171,10 +267,18 @@ function App() {
           <input type="text" name="speciality" id="speciality" autoComplete="off"  placeholder='Ej.: Python' value={newAda.speciality} onChange={handleNewAda}/>
           <fieldset>
             <legend>Redes</legend>
-              <label htmlFor="social_networks">Red:</label>
-              <input type="text" name="social_networks--name" id="social_networks--name" autoComplete="off"  placeholder='Ej.: Github' value={newAda.social_networks[0].name} onChange={handleNewAda}/>
-              <label htmlFor="speciality">URL:</label>
-              <input type="text" name="social_networks--url" id="social_networks--url" autoComplete="off"  placeholder='Ej.: https://github.com/username' value={newAda.social_networks[0].url} onChange={handleNewAda}/>
+              <div>
+                <label htmlFor="github">Github:</label>
+                <input type="text" name="github" id="github" autoComplete="off"  placeholder='Ej.: https://github.com/username' value={newAda.social_networks[0].url} onChange={handleNewAda}/>
+              </div>
+              <div>
+                <label htmlFor="linkedin">Linkedin:</label>
+                <input type="text" name="linkedin" id="linkedin" autoComplete="off"  placeholder='Ej.: https://linkedin.com/username' value={newAda.social_networks[1].url} onChange={handleNewAda}/>
+              </div>
+              <div>
+                <label htmlFor="twitter">Twitter:</label>
+                <input type="text" name="twitter" id="twitter" autoComplete="off"  placeholder='Ej.: https://twitter.com/username' value={newAda.social_networks[2].url} onChange={handleNewAda}/>
+              </div>
           </fieldset>
           <input type="submitt" value="Añadir una nueva Adalaber" onClick={handleNewAdaClick}/>
         </form>
