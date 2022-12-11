@@ -66,10 +66,10 @@ function App() {
   //Function to create object for a new Adalaber
   const handleNewAda = (id, value) => {
     if (id === 'github' && value !== '') {
-      //First element in the array
-      newAda.social_networks[0].name = 'GitHub';
-      newAda.social_networks[0].url = value;
-      setNewAda({ ...newAda })
+        //First element in the array
+        newAda.social_networks[0].name = 'GitHub';
+        newAda.social_networks[0].url = value;
+        setNewAda({ ...newAda })  
     } else if (id === 'linkedin' && value !== '') {
       //Second element in the array
       newAda.social_networks[1].name = 'LinkedIn';
@@ -81,45 +81,59 @@ function App() {
       newAda.social_networks[2].url = value;
       setNewAda({ ...newAda })
     } else {
-      //Other object properties
-      setNewAda({ ...newAda, [id]: value });
-      //Save in local new counselors added by user
-      if (id === 'counselor') {
-        ls.set('newCounselor', value)
-      }
+          //Other object properties
+          setNewAda({ ...newAda, [id]: value });
+          //Save in local new counselors added by user
+          if (id === 'counselor') {
+            ls.set('newCounselor', value)
+          }
     }
   };
 
+
   //Function to add a new Adalaber to the list
   const handleNewAdaClick = () => {
-    if (newAda.name !== '' && newAda.counselor !== '' && newAda.speciality !== '') {
-      //Add id to each new adalaber
-      newAda.id = crypto.randomUUID();
-      //Save in local storage
-      const newAdasLocal = [...newAdasList, newAda];
-      ls.set('newAdasLocal', newAdasLocal);
-      //Add to new adas array
-      setNewAdasList([...newAdasList, newAda]);
-      //Add new counselor to select 
-      let newSelect = { name: newAda.counselor, value: newAda.counselor };
-      ls.set('selectLocal', [...selectOptions, newSelect]);
-      setSelectOptions([...selectOptions, newSelect]);
-      //Empty input values
-      setNewAda({
-        id: '',
-        name: '',
-        counselor: '',
-        speciality: '',
-        social_networks: [
-          { name: '', url: '' },
-          { name: '', url: '' },
-          { name: '', url: '' }
-        ]
-      });
-      isCollapsed();
-    } else {
-      //Error message
-      setErrorMsg('*Name, counselor and speciality fields are mandatory')
+    console.log('click')
+    let re = /(.*[a-z]){3}/i;
+    if(newAda.name !== '' && newAda.counselor !== '' && newAda.speciality !== ''){
+      if(newAda.social_networks[0].url !== '' || newAda.social_networks[1].url !== '' || newAda.social_networks[2].url !== ''){
+        console.log('url lleno')
+        if(!re.test(newAda.social_networks[0].url) || !re.test(newAda.social_networks[1].url) || !re.test(newAda.social_networks[2].url)){
+        console.log('error')
+        //Error message
+        setErrorMsg('*Incorrect URL');
+        }
+      }else{
+          console.log('objeto a llenar')
+        //Add id to each new adalaber
+        newAda.id = crypto.randomUUID();
+        //Save in local storage
+        const newAdasLocal = [...newAdasList, newAda];
+        ls.set('newAdasLocal', newAdasLocal);
+        //Add to new adas array
+        setNewAdasList([...newAdasList, newAda]);
+        //Add new counselor to select 
+        let newSelect = { name: newAda.counselor, value: newAda.counselor };
+        ls.set('selectLocal', [...selectOptions, newSelect]);
+        setSelectOptions([...selectOptions, newSelect]);
+        //Empty input values
+        setNewAda({
+          id: '',
+          name: '',
+          counselor: '',
+          speciality: '',
+          social_networks: [
+            { name: '', url: '' },
+            { name: '', url: '' },
+            { name: '', url: '' }
+          ]
+        });
+        isCollapsed();
+      }
+    }else{
+        console.log('error general')
+        //Error message
+        setErrorMsg('*Name, counselor and speciality fields are mandatory');
     }
   }
 
@@ -176,6 +190,8 @@ function App() {
         { name: '', url: '' }
       ]
     });
+    setErrorMsg('');
+    setCollapsed('collapsed');
   }
   //Add or remove collapsed class
   const isCollapsed = () => {
