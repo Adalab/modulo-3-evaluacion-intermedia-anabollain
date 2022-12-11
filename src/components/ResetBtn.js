@@ -1,3 +1,6 @@
+//styles
+import '../styles/components/ResetBtn.scss';
+
 function ResetBtn(props) {
 
   //EVENT FUNCTIONS
@@ -8,7 +11,7 @@ function ResetBtn(props) {
     
   //RETURN
   return (
-    <button type='reset' onClick={handleClickReset}>Reset</button>
+    <button type='reset' className='searchform__reset' onClick={handleClickReset}>Reset</button>
     );
 }
 

@@ -1,3 +1,6 @@
+//styles
+import '../styles/components/FilterByCounselor.scss';
+
 function FilterByCounselor(props) {
 
     //EVENT FUNCTIONS
@@ -16,9 +19,9 @@ function FilterByCounselor(props) {
 
     //RETURN
     return (
-        <div>
-            <label htmlFor="">Escoge una tutora:</label>
-            <select name="counselor" id="counselor" value={props.searchAda.counselor} onChange={handleSearchAda}>
+        <div className='searchform__select'>
+            <label htmlFor="" className='searchform__select--label'>Counselor</label>
+            <select name="counselor" id="counselor" className='searchform__select--input' value={props.searchAda.counselor} onChange={handleSearchAda}>
                 {renderSelectOptions()}
             </select>
         </div>

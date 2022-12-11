@@ -1,31 +1,8 @@
-:root{
-    font-family: 'Open-sans', sans-serif;
-}
+@import './core/variables';
+@import './core/reset';
+@import './core/functions';
+@import './core/mixins';
 
-
-.header{
-    &__title{
-        font-size: 24px;
-    }
-}
-
-.searchForm{
-    display: flex;
-    gap: 20px;
-    width: 30%;
-    margin-bottom: 30px;
-}
-
-.table{
-    width: 90vw;
-    text-align: center;
-    border-spacing: 0px;
-    font-size: 14px;
-    &__head{
-        background-color: rgb(235, 234, 234);
-        &--cell{
-            height: 30px;
-            padding: 5px;
-        }
-    }
+.main{
+    position: relative;
 }

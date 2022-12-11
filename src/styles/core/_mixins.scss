@@ -1,0 +1,18 @@
+@mixin linkReset () {
+    text-decoration: none;
+    color: $color-main-text;
+}
+
+@mixin fieldset () {
+    font-size: rem(14);
+    border: none;
+    color: $color-main-text;
+}
+
+@mixin input () {
+            border: 1px solid $color-grey;
+            height: rem(30);
+            width: rem(150);
+            border-radius: rem(15);
+            text-align: center;
+}

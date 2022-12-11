@@ -1,3 +1,7 @@
+//styles
+import '../styles/components/Table.scss';
+
+
 function Table(props) {
 
   //EVENT FUNCTIONS
@@ -18,7 +22,15 @@ function Table(props) {
             <td className='table__body--cell'>{eachAda.speciality}</td>
             <td className='table__body--cell'>
               {eachAda.social_networks.map((eachSocial, index) => {
-                  return <span key={index}><a className='table__body--cell--social' href={eachSocial.url} target="_blank">{eachSocial.name}</a> </span>;
+                  if(eachSocial.name === 'GitHub'){
+                    return  <span key={index}><a className='table__body--cell--social' href={eachSocial.url} target="_blank"><i className="fa-brands fa-github-alt"></i></a> </span>;
+                  }else if(eachSocial.name === 'LinkedIn'){
+                    return  <span key={index}><a className='table__body--cell--social' href={eachSocial.url} target="_blank"><i className="fa-brands fa-linkedin-in"></i></a> </span>;
+                  }else if(eachSocial.name === 'Twitter'){
+                    return <span key={index}><a className='table__body--cell--social' href={eachSocial.url} target="_blank"><i className="fa-brands fa-twitter"></i></a> </span>;
+                  }else{
+                    return null;
+                  }
               })}
             </td>
           </tr>
@@ -30,16 +42,23 @@ function Table(props) {
     return props.newAdasList
     .map((eachAda)=>{
         return(
-          <tr key={eachAda.id} id={eachAda.id}>
-            <td className='table__body--cell'>{eachAda.name}</td>
+          <tr key={eachAda.id} id={eachAda.id} className='table__head--row'>
+            <td className='table__body--cell'><i id={eachAda.id} onClick={handleClickDelete} className="fa-solid fa-xmark"></i> {eachAda.name}</td>
             <td className='table__body--cell'>{eachAda.counselor}</td>
             <td className='table__body--cell'>{eachAda.speciality}</td>
             <td className='table__body--cell'>
               {eachAda.social_networks.map((eachSocial, index) => {
-                  return <span key={index}><a className='table__body--cell--social' href={eachSocial.url} target="_blank">{eachSocial.name}</a> </span>;
+                  if(eachSocial.name === 'GitHub'){
+                    return  <span key={index}><a className='table__body--cell--social' href={eachSocial.url} target="_blank"><i className="fa-brands fa-github-alt"></i></a> </span>;
+                  }else if(eachSocial.name === 'LinkedIn'){
+                    return  <span key={index}><a className='table__body--cell--social' href={eachSocial.url} target="_blank"><i className="fa-brands fa-linkedin-in"></i></a> </span>;
+                  }else if(eachSocial.name === 'Twitter'){
+                    return <span key={index}><a className='table__body--cell--social' href={eachSocial.url} target="_blank"><i className="fa-brands fa-twitter"></i></a> </span>;
+                  }else{
+                    return null;
+                  }
               })}
             </td>
-            <td className='table__body--cell'><i id={eachAda.id} onClick={handleClickDelete} class="fa-solid fa-trash"></i></td>
           </tr>
         )
       }) 
@@ -48,20 +67,22 @@ function Table(props) {
 
   //RETURN
   return (
-    <table className='table'>
-    <thead className='table__head'>
-      <tr>
-        <td className='table__head--cell'>Nombre</td>
-        <td className='table__head--cell'>Tutora</td>
-        <td className='table__head--cell'>Especialidad</td>
-        <td className='table__head--cell'>Redes</td>
-      </tr>
-    </thead>
-    <tbody className='table__body'>
-      {renderAdalabers()}
-      {renderNewAdalabers()}
-    </tbody>
-  </table>
+    <section>
+      <table className='table'>
+      <thead className='table__head'>
+        <tr>
+          <td className='table__head--cell'>Name</td>
+          <td className='table__head--cell'>Counselor</td>
+          <td className='table__head--cell'>Speciality</td>
+          <td className='table__head--cell'>Network</td>
+        </tr>
+      </thead>
+      <tbody className='table__body'>
+        {renderAdalabers()}
+        {renderNewAdalabers()}
+      </tbody>
+        </table>
+    </section>
     );
 }
 

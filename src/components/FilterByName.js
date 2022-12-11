@@ -1,3 +1,6 @@
+//styles
+import '../styles/components/FilterByName.scss';
+
 function FilterByName(props) {
 
     //EVENT FUNCTIONS
@@ -8,9 +11,9 @@ function FilterByName(props) {
     
     //RETURN
     return (
-        <div>
-            <label htmlFor="name">Nombre:</label>
-            <input type="text" name="name" id="name" autoComplete="off" placeholder='Ej.: MariCarmen' value={props.searchAda.name} onChange={handleSearchAda} />
+        <div className='searchform__text'>
+            <label htmlFor="name" className='searchform__text--label'>Name</label>
+            <input type="text" name="name" id="name" autoComplete="off" placeholder='e.g. MariCarmen' className='searchform__text--input' value={props.searchAda.name} onChange={handleSearchAda} />
         </div>
     );
 }

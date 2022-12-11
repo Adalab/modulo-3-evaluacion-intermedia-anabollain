@@ -1,0 +1,47 @@
+@import '../core/variables';
+@import '../core/reset';
+@import '../core/functions';
+@import '../core/mixins';
+
+.table{
+    width: 100%;
+    text-align: center;
+    border-spacing: rem(0);
+    font-size: rem(14);
+    table-layout: fixed;
+    &__head{
+        background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(29,253,228,1) 50%, rgba(252,176,69,1) 100%);
+        &--cell{
+            height: rem(50); 
+        }
+    }
+    &__body{
+        &--row{
+            width: 100vw;
+        }
+        &--cell{
+            width: 25%;
+            height: rem(60);
+            color: $color-main-text;
+            border-bottom: rem(0.5) solid rgba(29,253,228,1);
+            .fa-xmark{
+                cursor: pointer;
+                font-size: rem(14);
+                position: absolute;
+                translate: rem(-100);
+                padding: rem(5);
+                &:hover{
+                    color:rgba(29,253,228,1);
+                }
+            }
+            &--social{
+                color: $color-main-text;
+                font-size: rem(14);
+                padding: rem(5);
+                &:hover{
+                    color:rgba(252,176,69,1);
+                }
+            }
+        }
+    }
+}

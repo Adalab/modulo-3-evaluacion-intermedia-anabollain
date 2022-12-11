@@ -1,15 +1,19 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import {Routes, Route} from 'react-router-dom';
 //services
 import callToApi from '../services/apiAdalabers';
 import ls from '../services/localStorage';
 //components
 import Header from './Header';
-import Filters from './Filters';
+import Landing from './Landing';
+import Form from './Form';
 import Table from './Table';
+import AddForm from './AddForm';
 //styles
 import '../styles/App.scss';
-import AddForm from './AddForm';
+
+
 
 
 function App() {
@@ -38,14 +42,17 @@ function App() {
   }));
   //Flexible select so that user can add new counselors
   const [selectOptions, setSelectOptions] = useState(ls.get('selectLocal', [
-    { name: 'Escoge una opción', value: '' },
+    { name: 'Choose an option', value: '' },
     { name: 'Yanelis', value: 'yanelis' },
     { name: 'Dayana', value: 'dayana' },
     { name: 'Iván', value: 'iván' },
     { name: 'Miguel', value: 'miguel' }
   ]));
-
-
+  //Add or remove collapsed class
+  const [collapsed, setCollapsed] = useState('collapsed');
+  //Error message in add form
+  const [errorMsg, setErrorMsg] =useState('');
+  
   //USE EFFECT
   useEffect(() => {
     callToApi().then((response) => {
@@ -109,9 +116,10 @@ function App() {
           { name: '', url: '' }
         ]
       });
+      isCollapsed();
     } else {
       //Error message
-      alert('Debes rellenar todos los valores.')
+      setErrorMsg('*Name, counselor and speciality fields are mandatory')
     }
   }
 
@@ -169,7 +177,14 @@ function App() {
       ]
     });
   }
-
+  //Add or remove collapsed class
+  const isCollapsed = () => {
+    if (collapsed === 'collapsed'){
+      setCollapsed('');
+    }else{
+      setCollapsed('collapsed');
+    }
+  }
 
   //RENDER FUNCTIONS
   //Adalabers list
@@ -190,12 +205,18 @@ function App() {
   //RETURN
   return (
     <>
-      <Header />
-      <main>
-        <Filters searchAda={searchAda} handleSearchAda={handleSearchAda} selectOptions={selectOptions} handleClickReset ={handleClickReset}/>
-        <Table adalabersList={filteredAdalabers()} newAdasList={filteredNewAdalabers()} handleClickDelete={handleClickDelete} />
-        <AddForm newAda={newAda} handleNewAda={handleNewAda} handleNewAdaClick={handleNewAdaClick} />
-      </main>
+    <Routes>
+      <Route path='/' element={<> <Header/> <Landing/> </>}/>
+      <Route path='/adalabers' element={<>
+        <Header/>
+        <main className='main'>
+          <Form searchAda={searchAda} handleSearchAda={handleSearchAda} selectOptions={selectOptions} handleClickReset ={handleClickReset} collapsed={collapsed} isCollapsed ={isCollapsed} />
+          <AddForm newAda={newAda} handleNewAda={handleNewAda} handleNewAdaClick={handleNewAdaClick} collapsed={collapsed} isCollapsed={isCollapsed} errorMsg={errorMsg}/>
+          <Table adalabersList={filteredAdalabers()} newAdasList={filteredNewAdalabers()} handleClickDelete={handleClickDelete} />
+        </main>
+      </>}
+      />
+    </Routes>
     </>
   );
 }

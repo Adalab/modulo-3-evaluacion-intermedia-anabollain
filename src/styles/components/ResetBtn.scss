@@ -1,0 +1,16 @@
+@import '../core/variables';
+@import '../core/reset';
+@import '../core/functions';
+@import '../core/mixins';
+
+.searchform{
+    &__reset{
+        @include input ();
+        background-color: transparent;
+        cursor: pointer;
+        &:hover{
+            background-color: $color-main-text;
+            color: $color-white;
+        }
+    }
+}

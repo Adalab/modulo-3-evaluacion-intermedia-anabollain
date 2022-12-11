@@ -1,0 +1,19 @@
+@import '../core/variables';
+@import '../core/reset';
+@import '../core/functions';
+@import '../core/mixins';
+
+.searchform{
+    &__select{
+        //General properties
+        @include fieldset ();
+        padding-left: rem(50);
+        &--label{
+            padding-right: rem(20);
+        }
+        &--input{
+            @include input ();
+            cursor: pointer;
+        }
+    }
+}

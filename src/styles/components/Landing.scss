@@ -1,0 +1,46 @@
+@import '../core/variables';
+@import '../core/reset';
+@import '../core/functions';
+@import '../core/mixins';
+
+.landing{
+    //General properties
+    height: 90vh;
+    background-image: url(../../images/pexels-lenin-estrada-2569997.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    //Display
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: rem(15);
+    padding-top: rem(110);
+    padding-left: rem(40);
+    &__title{
+        //General properties
+        color: $color-white;
+        opacity: 0.8;
+        font-size: rem(30);
+        font-weight: bold;
+        text-transform: lowercase;
+        //Display
+        padding: rem(10);
+    }
+    &__link{
+        @include linkReset ();
+        //General properties
+        background-color: $color-white;
+        width: rem(130);
+        height: rem(40);
+        border-radius: rem(20);
+        opacity: 0.8;
+        font-size: rem(13);
+        font-weight: bold;
+        text-transform: lowercase;
+        text-align: center;
+        //Display
+        padding: rem(10);
+    }
+}

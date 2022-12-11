@@ -1,0 +1,30 @@
+@import '../core/variables';
+@import '../core/reset';
+@import '../core/functions';
+@import '../core/mixins';
+
+.header{
+    height: 10vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: rem(30);
+    padding-right: rem(50);
+    &__title{
+        @include linkReset ();
+        text-transform: lowercase;
+        font-size: rem(12);
+        color: $color-main-text;
+    }
+    &__nav{
+        list-style: none;
+        display: flex;
+        gap: rem(30);
+        &--link{
+            @include linkReset ();
+            text-transform: lowercase;
+            color: $color-main-text;
+            font-size: rem(14);
+        }
+    }
+}
